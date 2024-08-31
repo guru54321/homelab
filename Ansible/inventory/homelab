@@ -1,0 +1,8 @@
+[srv-prod]
+frigate.local
+kestra.local
+192.168.1.139
+
+[srv-pi]
+unifi.local
+pihole.local
