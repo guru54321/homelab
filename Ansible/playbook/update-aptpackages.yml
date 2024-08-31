@@ -1,4 +1,4 @@
-- hosts: "{{ hosts }}"
+- hosts: "{{ host_list }}"
 
   become: yes
   tasks:
