@@ -1,9 +1,8 @@
-[srv-prod]
-frigate.local
+[srv_vm]
+frigate.local ansible_host=192.168.1.192
 kestra.local
 192.168.1.139
-192.168.1.192
 
-[srv-pi]
-unifi.local
-pihole.local
+[srvpi]
+unifi.local  ansible_host=192.168.1.2
+pihole.local ansible_host=192.168.1.3
