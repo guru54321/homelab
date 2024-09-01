@@ -18,7 +18,7 @@
 
     - name: Send notification message via Slack all options
       slack:
-        token: {{ slack_webhook }}
+        token: "{{ slack_webhook }}"
         msg: '{{ host_list }} needs a reboot after apt updates'
         channel: '#kresta'
         username: 'Ansible on {{ inventory_hostname }}'
