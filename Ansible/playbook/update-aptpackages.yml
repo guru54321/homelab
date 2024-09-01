@@ -8,3 +8,20 @@
       apt:
         upgrade: yes
         update_cache: yes
+
+    # Check if reboot is required
+    - name: check if system reboot is required
+      become: true
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_required
+
+    - name: Send notification message via Slack all options
+      slack:
+        token: {{ slack_webhook }}
+        msg: '{{ host_list }} needs a reboot after apt updates'
+        channel: '#kresta'
+        username: 'Ansible on {{ inventory_hostname }}'
+        link_names: 0
+        parse: 'none'
+      delegate_to: localhost
