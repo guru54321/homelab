@@ -24,4 +24,3 @@
         username: 'Ansible on {{ inventory_hostname }}'
         link_names: 0
         parse: 'none'
-      delegate_to: localhost
