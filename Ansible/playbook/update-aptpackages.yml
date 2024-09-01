@@ -24,3 +24,5 @@
         username: 'Ansible on {{ inventory_hostname }}'
         link_names: 0
         parse: 'none'
+      when: reboot_required.stat.exists
+      
