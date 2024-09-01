@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  frigate:
+    container_name: frigate
+    privileged: true # this may not be necessary for all setups
+    restart: unless-stopped
+    image: ghcr.io/blakeblackshear/frigate:stable
+    shm_size: "64mb" # update for your cameras based on calculation above
+#    devices:
+#      - /dev/bus/usb:/dev/bus/usb
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./config.yml:/config/config.yml:ro
+      - ./media/recordings:/media/frigate/recordings
+      - ./media/clips:/media/frigate/clips
+      - ./db:/db
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - "5000:5000"
+      - "1935:1935" # RTMP feeds
+      - "8554:8554" #Birdseye in V0.12
+      - "8555:8555/tcp" #Webrtc over TCP
+      - "8555:8555/udp" #Webrtc over UDP
+    environment:
+      - FRIGATE_RTSP_PASSWORD="password"

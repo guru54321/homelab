@@ -1,0 +1,34 @@
+id: update_dockercleanup
+namespace: ansible.eendenkroos.3
+
+inputs:
+  - id: host
+    type: STRING
+    description: "The host to update"
+    required: true
+   
+tasks:
+  - id: wdir
+    type: io.kestra.plugin.core.flow.WorkingDirectory
+    tasks:
+    - id: git_clone
+      type: "io.kestra.plugin.git.Clone"
+      url: https://github.com/guru54321/homelab
+      branch: main
+      username: "{{ secret('GITHUB_USER')}}"
+      password: "{{ secret('GITHUB_TOKEN')}}"
+
+    - id: ansible_task
+      type: io.kestra.plugin.ansible.cli.AnsibleCLI
+      taskRunner:
+        type: io.kestra.plugin.scripts.runner.docker.Docker
+        image: cytopia/ansible:latest-tools
+        pullPolicy: IF_NOT_PRESENT
+        user: "1000"
+      inputFiles:
+        id_rsa: "{{ secret('SSH_KEY') }}"
+      commands:
+        - ansible-playbook -i Ansible/inventory/homelab --private-key id_rsa --extra-vars "host_list={{inputs.host}} slack_token={% raw %}{{ secret('SLACK_TOKEN') }}{% endraw %}" Ansible/playbook/update-dockercleanup.yml
+      env: 
+        ANSIBLE_HOST_KEY_CHECKING: "False"
+        ANSIBLE_REMOTE_USER: "ubuntu"
