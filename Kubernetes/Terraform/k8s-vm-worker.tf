@@ -1,7 +1,7 @@
 # k8s-vm-worker.tf
 resource "proxmox_virtual_environment_vm" "k8s-work-01" {
   provider  = proxmox.proxmox
-  node_name = var.proxmox.node_name
+  node_name = var.node.node_name
 
   name        = "k8s-work-01"
   description = "Kubernetes Worker 01"

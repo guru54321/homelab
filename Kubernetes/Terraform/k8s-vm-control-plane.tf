@@ -1,7 +1,7 @@
 # k8s-vm-control-plane.tf
 resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
   provider  = proxmox.proxmox
-  node_name = var.proxmox.node_name
+  node_name = var.node.node_name
 
   name        = "k8s-ctrl-01"
   description = "Kubernetes Control Plane 01"

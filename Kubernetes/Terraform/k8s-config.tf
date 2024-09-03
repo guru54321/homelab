@@ -2,7 +2,7 @@
 
 resource "proxmox_virtual_environment_download_file" "debian_12_generic_image" {
   provider     = proxmox.proxmox
-  node_name    = var.proxmox.node_name
+  node_name    = var.node.node_name
   content_type = "iso"
   datastore_id = "local"
 
@@ -16,7 +16,7 @@ resource "proxmox_virtual_environment_download_file" "debian_12_generic_image" {
 # https://github.com/bpg/terraform-provider-proxmox/blob/main/docs/guides/cloud-init.md
 resource "proxmox_virtual_environment_file" "cloud-init-ctrl-01" {
   provider     = proxmox.proxmox
-  node_name    = var.euproxmoxclid.node_name
+  node_name    = var.node.node_name
   content_type = "snippets"
   datastore_id = "local"
 
@@ -40,7 +40,7 @@ resource "proxmox_virtual_environment_file" "cloud-init-ctrl-01" {
 
 resource "proxmox_virtual_environment_file" "cloud-init-work-01" {
   provider     = proxmox.proxmox
-  node_name    = var.proxmox.node_name
+  node_name    = var.node.node_name
   content_type = "snippets"
   datastore_id = "local"
 
