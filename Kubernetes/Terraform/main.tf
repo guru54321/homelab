@@ -11,13 +11,13 @@ terraform {
 # main.tf
 provider "proxmox" {
   alias    = "proxmox"
-  endpoint = var.proxmox.endpoint
-  insecure = var.proxmox.insecure
+  endpoint = var.node.endpoint
+  insecure = var.node.insecure
 
-  api_token = var.proxmox.api_token
+  api_token = var.proxmox_auth.api_token
   ssh {
     agent    = true
-    username = var.proxmox.username
+    username = var.proxmox_auth.username
   }
 
   tmp_dir = "/var/tmp"
