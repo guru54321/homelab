@@ -1,5 +1,5 @@
 # variables.tf
-variable "proxmox" {
+variable "node" {
   description = "proxmox Proxmox server configuration"
   type        = object({
     node_name = string
