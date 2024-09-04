@@ -10,14 +10,8 @@ terraform {
 
 provider "proxmox" {
   alias    = "proxmox"
-  endpoint = var.node.endpoint
-  insecure = var.node.insecure
-
-  api_token = var.proxmox_auth.api_token
-  ssh {
-    agent    = true
-    username = var.proxmox_auth.username
-  }
-
-  tmp_dir = "/var/tmp"
+  pm_api_url = var.node.endpoint
+  pm_tls_insecure = var.node.insecure
+  pm_api_token_id = var.proxmox_auth.api_token
+  pm_user = var.proxmox_auth.username
 }
