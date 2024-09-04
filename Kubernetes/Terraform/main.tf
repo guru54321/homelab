@@ -2,13 +2,12 @@
 terraform {
   required_providers {
     proxmox = {
-      source  = "bpg/proxmox"
-      version = "0.50.0"
+      source  = "telmate/proxmox"
+      version = "v3.0.1-rc4"
     }
   }
 }
 
-# main.tf
 provider "proxmox" {
   alias    = "proxmox"
   endpoint = var.node.endpoint
