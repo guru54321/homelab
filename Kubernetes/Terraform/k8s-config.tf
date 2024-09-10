@@ -5,8 +5,7 @@
 resource "proxmox_vm_qemu" "test_server" {
   count = 0  # just want 1 for now, set to 0 and apply to destroy VM
   name = "test-kub-vm-${count.index + 1}" #count.index starts at 0, so + 1 means this VM will be named test-vm-1 in proxmox
-  # this now reaches out to the vars file. I could've also used this var above in the pm_api_url setting but wanted to spell it out up there. target_node is different than api_url. target_node is which node hosts the template and thus also which node will host the new VM. it can be different than the host you use to communicate with the API. the variable contains the contents "prox-1u"
-  target_node = var.proxmox_host
+  target_node = var.node.node_name
   clone = "ubuntu-cloudinit-template"
   # basic VM settings here. agent refers to guest agent
   agent = 1
