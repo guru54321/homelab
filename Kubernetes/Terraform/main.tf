@@ -8,10 +8,8 @@ terraform {
   }
 }
 
-
-
 provider "proxmox" {
-alias    = "euclid"
+  alias    = "proxmox"
   endpoint = var.node.endpoint
   insecure = var.node.insecure
   api_token = var.proxmox_auth.api_token
