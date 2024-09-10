@@ -8,12 +8,16 @@ terraform {
   }
 }
 
+
+
 provider "proxmox" {
+alias    = "euclid"
   endpoint = var.node.endpoint
-  username = var.proxmox_auth.username
   insecure = var.node.insecure
+  api_token = var.proxmox_auth.api_token
   ssh {
     agent = true
     username = var.proxmox_auth.username
   }
+  tmp_dir = "/var/tmp"
 }
