@@ -37,7 +37,7 @@ tasks:
       inputFiles:
         id_rsa: "{{ secret('SSH_KEY') }}"
       commands:
-        - ansible-playbook -i Ansible/inventory/homelab --private-key id_rsa  Ansible/playbook/install-kubernetes.yml
+        - ansible-playbook -i Ansible/inventory/homelab --private-key id_rsa  Ansible/playbook/install_kubernetes.yml
       env: 
         ANSIBLE_HOST_KEY_CHECKING: "False"
         ANSIBLE_REMOTE_USER: "ubuntu"        
