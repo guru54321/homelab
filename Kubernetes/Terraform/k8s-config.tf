@@ -20,7 +20,7 @@ resource "proxmox_vm_qemu" "test_server" {
     slot = "scsi0"
     # set disk size here. leave it small for testing because expanding the disk takes time.
     size = "10G"
-    type = "scsi"
+    type = "disk"
     storage = "local-proxmox"
     iothread = false
   }
