@@ -1,0 +1,43 @@
+id: install-kubernetes.yml
+namespace: ansible.eendenkroos.3
+
+tasks:
+  - id: wdir
+    type: io.kestra.plugin.core.flow.WorkingDirectory
+    tasks:
+    - id: git_clone
+      type: "io.kestra.plugin.git.Clone"
+      url: https://github.com/guru54321/homelab
+      branch: main
+      username: "{{ secret('GITHUB_USER')}}"
+      password: "{{ secret('GITHUB_TOKEN')}}"
+
+    - id: ansible_task
+      type: io.kestra.plugin.ansible.cli.AnsibleCLI
+      taskRunner:
+        type: io.kestra.plugin.scripts.runner.docker.Docker
+        image: cytopia/ansible:latest-tools
+        pullPolicy: IF_NOT_PRESENT
+        user: "1000"
+      inputFiles:
+        id_rsa: "{{ secret('SSH_KEY') }}"
+      commands:
+        - ansible-playbook -i Ansible/inventory/homelab --private-key id_rsa --extra-vars "host_list=kubernetes-controlplane kubernetes-worker1 kubernetes-worker2" Ansible/playbook/install-docker.yml
+      env: 
+        ANSIBLE_HOST_KEY_CHECKING: "False"
+        ANSIBLE_REMOTE_USER: "ubuntu"
+
+    - id: ansible_task
+      type: io.kestra.plugin.ansible.cli.AnsibleCLI
+      taskRunner:
+        type: io.kestra.plugin.scripts.runner.docker.Docker
+        image: cytopia/ansible:latest-tools
+        pullPolicy: IF_NOT_PRESENT
+        user: "1000"
+      inputFiles:
+        id_rsa: "{{ secret('SSH_KEY') }}"
+      commands:
+        - ansible-playbook -i Ansible/inventory/homelab --private-key id_rsa  Ansible/playbook/install-kubernetes.yml
+      env: 
+        ANSIBLE_HOST_KEY_CHECKING: "False"
+        ANSIBLE_REMOTE_USER: "ubuntu"        
