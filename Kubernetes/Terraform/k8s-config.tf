@@ -4,7 +4,7 @@ resource "proxmox_virtual_environment_download_file" "debian_12_generic_image" {
   provider     = proxmox.proxmox
   node_name    = var.node.node_name
   content_type = "iso"
-  datastore_id = "local"
+  datastore_id = "storage/local"
 
   file_name          = "debian-12-generic-amd64-20240201-1644.img"
   url                = "https://cloud.debian.org/images/cloud/bookworm/20240211-1654/debian-12-generic-amd64-20240211-1654.qcow2"
