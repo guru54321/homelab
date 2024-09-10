@@ -9,17 +9,17 @@ terraform {
 }
 
 provider "proxmox" {
-  alias    = "proxmox"
   pm_api_url = var.node.endpoint
   pm_tls_insecure = var.node.insecure
   pm_api_token_id = var.proxmox_auth.api_token
   pm_user = var.proxmox_auth.username
+  pm_debug = true
 }
 
 # resource is formatted to be "[type]" "[entity_name]" so in this case
 # we are looking to create a proxmox_vm_qemu entity named test_server
 resource "proxmox_vm_qemu" "test_server" {
-  count = 0  # just want 1 for now, set to 0 and apply to destroy VM
+  count = 1  # just want 1 for now, set to 0 and apply to destroy VM
   name = "test-kub-vm-${count.index + 1}" #count.index starts at 0, so + 1 means this VM will be named test-vm-1 in proxmox
   target_node = var.node.node_name
   clone = "ubuntu-cloudinit-template"
