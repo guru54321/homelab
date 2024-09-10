@@ -1,7 +1,7 @@
 ---
 # Installs the kubernetes components for the control plane and the workers
 # This script assumes docker is already installed using install_docker.yml
-- hosts: kubernetes_controlplane
+- hosts: kubernetes_controlplane.local
   become: yes
   tasks:
     - name: Install qemu-guest-agent
@@ -35,7 +35,7 @@
       command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
       when: "'calico' in kubeadm_output.stdout"
 
-- hosts: workers
+- hosts: kubernetes-worker1.local kubernetes-worker2.local
   become: yes
   tasks:
     - name: Install qemu-guest-agent
