@@ -4,11 +4,17 @@
 - hosts: kubernetes_controlplane
   become: yes
   tasks:
+    - name: Install qemu-guest-agent
+      apt:
+        name: "qemu-guest-agent"
+        state: present
+
     - name: Install kubeadm, kubelet, and kubectl
       apt:
         name: "{{ item }}"
         state: present
       loop:
+        - qemu-guest-agent
         - kubeadm
         - kubelet
         - kubectl
@@ -32,6 +38,11 @@
 - hosts: workers
   become: yes
   tasks:
+    - name: Install qemu-guest-agent
+      apt:
+        name: "qemu-guest-agent"
+        state: present
+
     - name: Install kubeadm, kubelet, and kubectl
       apt:
         name: "{{ item }}"
@@ -42,5 +53,5 @@
         - kubectl
 
     - name: Join worker nodes to the cluster
-      command: "{{ hostvars['master']['kubeadm_output']['stdout_lines'][0] }}"
-      when: "'kubeadm join' in hostvars['master']['kubeadm_output']['stdout']"
+      command: "{{ hostvars['kubernetes_controlplane']['kubeadm_output']['stdout_lines'][0] }}"
+      when: "'kubeadm join' in hostvars['kubernetes_controlplane']['kubeadm_output']['stdout']"
