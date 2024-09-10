@@ -12,7 +12,7 @@ tasks:
       username: "{{ secret('GITHUB_USER')}}"
       password: "{{ secret('GITHUB_TOKEN')}}"
 
-    - id: ansible_task
+    - id: install-docker-playbook
       type: io.kestra.plugin.ansible.cli.AnsibleCLI
       taskRunner:
         type: io.kestra.plugin.scripts.runner.docker.Docker
@@ -27,7 +27,7 @@ tasks:
         ANSIBLE_HOST_KEY_CHECKING: "False"
         ANSIBLE_REMOTE_USER: "ubuntu"
 
-    - id: ansible_task
+    - id: install-kubernetes-playbook
       type: io.kestra.plugin.ansible.cli.AnsibleCLI
       taskRunner:
         type: io.kestra.plugin.scripts.runner.docker.Docker
