@@ -1,23 +1,53 @@
 ---
 # Installs the kubernetes components for the control plane and the workers
 # This script assumes docker is already installed using install_docker.yml
-- hosts: kubernetes_controlplane.local
-  become: yes
-  tasks:
-    - name: Install qemu-guest-agent
-      apt:
-        name: "qemu-guest-agent"
-        state: present
 
-    - name: Install kubeadm, kubelet, and kubectl
+# Step 1: Install pre-requisites for all nodes in the cluster
+- hosts: master.local worker1.local worker2.local
+  become: yes
+  vars:
+    k8s_url_apt_key: "https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key"
+    k8s_gpgpath: /usr/share/keyrings/kubernetes-apt-keyring.gpg
+    k8s_repository: "https://pkgs.k8s.io/core:/stable:/v1.28/deb/"
+    k8s_packages:
+    - kubernetes-cni
+    - kubelet
+
+  tasks:
+    - name: install_prerequisites
       apt:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - qemu-guest-agent
-        - kubeadm
-        - kubelet
-        - kubectl
+        name:
+          - qemu-guest-agent
+          - ca-certificates
+          - curl
+          - apt-transport-https
+          - gnupg
+        update_cache: yes
+
+    - name: Get Kubernetes package key
+      shell: curl -fsSL {{ k8s_url_apt_key }} | gpg --dearmor -o {{ k8s_gpgpath }}
+      args:
+        creates: "{{ k8s_gpgpath }}"
+
+    - name: Install Kubernetes repository
+      apt_repository:
+        filename: kubernetes
+        repo: "deb [signed-by={{ k8s_gpgpath }}] {{ k8s_repository }} /"
+
+    - name: Install Kubernetes Packages
+      package: name={{ item }} state=present force=yes install_recommends=no
+      loop: "{{ k8s_packages }}"
+
+# Step 2: Install kubeadm on the master and configure it
+- hosts: master.local
+  become: yes
+  vars:
+    k8s_packages:
+    - kubeadm
+  tasks:
+    - name: Install Kubernetes Master Packages
+      package: name={{ item }} state=present force=yes install_recommends=no
+      loop: "{{ k8s_packages }}"
 
     - name: Initialize Kubernetes master
       command: kubeadm init --pod-network-cidr=10.244.0.0/16
@@ -35,23 +65,10 @@
       command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
       when: "'calico' in kubeadm_output.stdout"
 
-- hosts: kubernetes-worker1.local kubernetes-worker2.local
+# Step 3: join the workers in the cluster
+- hosts: worker1.local worker2.local
   become: yes
   tasks:
-    - name: Install qemu-guest-agent
-      apt:
-        name: "qemu-guest-agent"
-        state: present
-
-    - name: Install kubeadm, kubelet, and kubectl
-      apt:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - kubeadm
-        - kubelet
-        - kubectl
-
     - name: Join worker nodes to the cluster
-      command: "{{ hostvars['kubernetes_controlplane']['kubeadm_output']['stdout_lines'][0] }}"
-      when: "'kubeadm join' in hostvars['kubernetes_controlplane']['kubeadm_output']['stdout']"
+      command: "{{ hostvars['master']['kubeadm_output']['stdout_lines'][0] }}"
+      when: "'kubeadm join' in hostvars['master']['kubeadm_output']['stdout']"

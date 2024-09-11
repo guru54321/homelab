@@ -12,20 +12,20 @@ tasks:
       username: "{{ secret('GITHUB_USER')}}"
       password: "{{ secret('GITHUB_TOKEN')}}"
 
-    - id: install-docker-playbook
-      type: io.kestra.plugin.ansible.cli.AnsibleCLI
-      taskRunner:
-        type: io.kestra.plugin.scripts.runner.docker.Docker
-        image: cytopia/ansible:latest-tools
-        pullPolicy: IF_NOT_PRESENT
-        user: "1000"
-      inputFiles:
-        id_rsa: "{{ secret('SSH_KEY') }}"
-      commands:
-        - ansible-playbook -i Ansible/inventory/homelab --private-key id_rsa --extra-vars "host_list=kubernetes-controlplane.local kubernetes-worker1.local kubernetes-worker2.local" Ansible/playbook/install-docker.yml
-      env: 
-        ANSIBLE_HOST_KEY_CHECKING: "False"
-        ANSIBLE_REMOTE_USER: "ubuntu"
+#    - id: install-docker-playbook
+#      type: io.kestra.plugin.ansible.cli.AnsibleCLI
+#      taskRunner:
+#        type: io.kestra.plugin.scripts.runner.docker.Docker
+#        image: cytopia/ansible:latest-tools
+#        pullPolicy: IF_NOT_PRESENT
+#        user: "1000"
+#      inputFiles:
+#        id_rsa: "{{ secret('SSH_KEY') }}"
+#      commands:
+#        - ansible-playbook -i Ansible/inventory/homelab --private-key id_rsa --extra-vars "host_list=master.local worker1.local worker2.local" Ansible/playbook/install-docker.yml
+#      env: 
+#        ANSIBLE_HOST_KEY_CHECKING: "False"
+#        ANSIBLE_REMOTE_USER: "ubuntu"
 
     - id: install-kubernetes-playbook
       type: io.kestra.plugin.ansible.cli.AnsibleCLI
