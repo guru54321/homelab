@@ -170,4 +170,4 @@
   tasks:
     - name: Join worker nodes to the cluster
       command: "{{ JOIN_COMMAND.stdout_lines }}"
-      when: "'kubeadm join' in hostvars['master']['kubeadm_output']['stdout']"
+      when: "'kubeadm join' in hostvars['master.local']['kubeadm_output']['stdout']"
