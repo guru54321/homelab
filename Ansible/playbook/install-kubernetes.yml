@@ -164,11 +164,6 @@
       command: kubectl get nodes
       register: NODES
 
-
-    - name: Show the registered variable
-      debug:
-        var: JOIN_COMMAND
-
 # Step 3: join the workers in the cluster
 - hosts: worker1.local worker2.local
   become: yes
@@ -178,5 +173,5 @@
         var: ansible_facts
 
     - name: Join worker nodes to the cluster
-      command: "{{ JOIN_COMMAND.stdout_lines }}"
+      command: "hostvars['master.local']['JOIN_COMMAND']['stdout']"
       when: "'hostvars[inventory_hostname]' not in hostvars['master.local']['NODES']['stdout']"
