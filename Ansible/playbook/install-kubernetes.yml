@@ -135,12 +135,19 @@
       register: kubeadm_output
       ignore_errors: yes
 
-    - name: Set up kubectl for the current user
-      command: "{{ item }}"
-      with_items:
-        - "mkdir -p $HOME/.kube"
-        - "cp /etc/kubernetes/admin.conf $HOME/.kube/config"
-        - "chown $(id -u):$(id -g) $HOME/.kube/config"
+    - name: Create a .kube directory if it does not exist
+      ansible.builtin.file:
+        path: /home/ubuntu/.kube
+        state: directory
+        mode: '0755'
+
+    - name: Copy standard kubernetes config from /etc/
+      ansible.builtin.copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/ubuntu/.kube/config
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
 
     - name: Install Calico network plugin
       command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
