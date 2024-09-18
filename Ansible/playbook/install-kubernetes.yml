@@ -104,7 +104,7 @@
 
     - name: Downloading and extracting {{ crictl_app }} {{ crictl_version }}
       ansible.builtin.unarchive:
-        src: "https://github.com/kubernetes-sigs/cri-tools/releases/download/{{crictl_version}}/crictl-{{crictl_version}}-linux-amd64.tar.gznf"
+        src: "https://github.com/kubernetes-sigs/cri-tools/releases/download/{{crictl_version}}/crictl-{{crictl_version}}-linux-amd64.tar.gz"
         dest: "/usr/local/bin"
         owner: "ubuntu"
         group: "users"
