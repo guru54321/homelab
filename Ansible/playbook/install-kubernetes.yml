@@ -156,10 +156,18 @@
       command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
       when: "'calico' in kubeadm_output.stdout"
 
+    - name: Get the join command from the master node and store it in a registered var JOIN_COMMAND
+      command: kubeadm token create --print-join-command
+      register: JOIN_COMMAND
+
+    - name: Show the registered variable
+      debug:
+      var: JOIN_COMMAND
+
 # Step 3: join the workers in the cluster
 - hosts: worker1.local worker2.local
   become: yes
   tasks:
     - name: Join worker nodes to the cluster
-      command: "{{ hostvars['master']['kubeadm_output']['stdout_lines'][0] }}"
+      command: "{{ JOIN_COMMAND.stdout_lines }}"
       when: "'kubeadm join' in hostvars['master']['kubeadm_output']['stdout']"
