@@ -162,7 +162,7 @@
 
     - name: Show the registered variable
       debug:
-      var: JOIN_COMMAND
+        var: JOIN_COMMAND
 
 # Step 3: join the workers in the cluster
 - hosts: worker1.local worker2.local
