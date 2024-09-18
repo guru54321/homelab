@@ -160,6 +160,11 @@
       command: kubeadm token create --print-join-command
       register: JOIN_COMMAND
 
+    - name: Get the join command from the master node and store it in a registered var JOIN_COMMAND
+      command: kubectl get nodes
+      register: NODES
+
+
     - name: Show the registered variable
       debug:
         var: JOIN_COMMAND
@@ -174,4 +179,4 @@
 
     - name: Join worker nodes to the cluster
       command: "{{ JOIN_COMMAND.stdout_lines }}"
-      when: "'kubeadm join' in hostvars['master.local']['kubeadm_output']['stdout']"
+      when: "hostvars[inventory_hostname] not in hostvars['master.local']['NODES']['stdout']"
