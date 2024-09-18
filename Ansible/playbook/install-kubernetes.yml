@@ -139,10 +139,13 @@
       ansible.builtin.file:
         path: /home/ubuntu/.kube
         state: directory
+        owner: ubuntu
+        group: ubuntu
         mode: '0755'
 
-    - name: Copy standard kubernetes config from /etc/
+    - name: Copy /etc/kubernetes/admin.conf to the .kube folder
       ansible.builtin.copy:
+        remote_src: true
         src: /etc/kubernetes/admin.conf
         dest: /home/ubuntu/.kube/config
         owner: ubuntu
