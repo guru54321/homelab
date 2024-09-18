@@ -15,7 +15,9 @@
     crictl_version: "v1.28.0"
     k8s_packages:
     - kubernetes-cni
+    - kubectl
     - kubelet
+    - kubeadm
 
   tasks:
     - name: Install qemu qemu-guest-agent package
@@ -74,7 +76,7 @@
         filename: cri-o
         repo: "deb [signed-by={{ crio_gpgpath }}] {{ crio_repository }} /"
 
-    - name: Install Kubernetes Packages
+    - name: Install CRI-O Packages
       package: 
         name: cri-o 
         state: present 
