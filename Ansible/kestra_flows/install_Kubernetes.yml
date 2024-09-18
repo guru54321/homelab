@@ -37,6 +37,8 @@ tasks:
       inputFiles:
         id_rsa: "{{ secret('SSH_KEY') }}"
       commands:
+        - ansible-galaxy collection install ansible.posix
+        - ansible-galaxy collection install community.general
         - ansible-playbook -i Ansible/inventory/homelab --private-key id_rsa  Ansible/playbook/install-kubernetes.yml
       env: 
         ANSIBLE_HOST_KEY_CHECKING: "False"
