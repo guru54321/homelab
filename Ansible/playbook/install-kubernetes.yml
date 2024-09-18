@@ -173,5 +173,5 @@
         var: hostvars['master.local']['JOIN_COMMAND']['stdout']
 
     - name: Join worker nodes to the cluster
-      command: hostvars['master.local']['JOIN_COMMAND']['stdout']
+      command: "{{ hostvars['master.local']['JOIN_COMMAND']['stdout'] }}"
       when: "'hostvars[inventory_hostname]' not in hostvars['master.local']['NODES']['stdout']"
