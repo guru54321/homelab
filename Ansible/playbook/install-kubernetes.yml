@@ -179,4 +179,4 @@
 
     - name: Join worker nodes to the cluster
       command: "{{ JOIN_COMMAND.stdout_lines }}"
-      when: "hostvars[inventory_hostname] not in hostvars['master.local']['NODES']['stdout']"
+      when: "'hostvars[inventory_hostname]' not in hostvars['master.local']['NODES']['stdout']"
