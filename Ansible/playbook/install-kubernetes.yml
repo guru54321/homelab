@@ -124,14 +124,7 @@
 # Step 2: Install kubeadm on the master and configure it
 - hosts: master.local
   become: yes
-  vars:
-    k8s_packages:
-    - kubeadm
   tasks:
-    - name: Install Kubernetes Master Packages
-      package: name={{ item }} state=present force=yes install_recommends=no
-      loop: "{{ k8s_packages }}"
-
     - name: Initialize Kubernetes master
       command: kubeadm init --pod-network-cidr=10.244.0.0/16
       register: kubeadm_output
