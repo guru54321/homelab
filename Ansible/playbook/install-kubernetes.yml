@@ -18,10 +18,14 @@
     - kubelet
 
   tasks:
+    - name: Install qemu qemu-guest-agent package
+      apt:
+        name: qemu-guest-agent
+        state: present
+      
     - name: install_prerequisites
       apt:
         name:
-          - qemu-guest-agent
           - ca-certificates
           - curl
           - apt-transport-https
